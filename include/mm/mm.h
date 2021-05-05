@@ -9,6 +9,7 @@ using namespace std;
 
 class memSingleton;
 class mem_policy;
+class Collector;
 class Mem_manager
 {
     char *p;
@@ -46,10 +47,15 @@ public:
 
 class Collector
 {
-    // memS
+    // vector
 public:
     void collect(){};
+    // void print_stats();
+    // register and unregister idx
+    // register subptr
+    // find owner
 };
+
 class mem_policy
 {
 public:
@@ -107,7 +113,10 @@ class memSingleton
     Collector C;
     memSingleton(int n, mem_policy *m) : manager(n, m){};
     memSingleton(const memSingleton &);
-
+    ~memSingleton()
+    {
+    }
+    // has to take care of doing placement new, register owner and what not
 public:
     Mem_manager::ptr alloc(size_t s)
     {
