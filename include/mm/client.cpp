@@ -4,24 +4,24 @@ using namespace std;
 int main()
 {
     mem_policy *mm = new first_fit;
-    memSingleton &m = memSingleton::get(10000, mm);
-    m.display_mem_map();
+    memSingleton &m = memSingleton::get(10, mm);
+    m.dump();
     // m.print_book();
     printf("\n");
 
-    memSingleton::Mem_manager::ptr a = m.mymalloc(20 * sizeof(char));
+    Mem_manager::ptr a = m.alloc(20 * sizeof(char));
     printf("a:20\n");
-    m.display_mem_map();
+    m.dump();
     // m.print_book();
     printf("\n");
 
     // for(int i = 0; i < 200; ++i)
     // printf("%c",a[i] );
 
-    memSingleton::Mem_manager::ptr b = m.mymalloc(30 * sizeof(char));
+    Mem_manager::ptr b = m.alloc(30 * sizeof(char));
     printf("b:30\n");
     // printf("b:%p\n",b);
-    m.display_mem_map();
+    m.dump();
     printf("\n");
 
     // for (int i = 0; i < 30; ++i)
@@ -30,81 +30,81 @@ int main()
     //     printf("%c", b[i]);
     printf("\n");
 
-    m.myfree(a);
+    m.free(a);
     printf("free a:20\n");
-    m.display_mem_map();
+    m.dump();
     printf("\n");
 
-    memSingleton::Mem_manager::ptr c = m.mymalloc(4 * sizeof(char));
+    Mem_manager::ptr c = m.alloc(4 * sizeof(char));
     printf("c:4\n");
-    m.display_mem_map();
+    m.dump();
     printf("\n");
-
-    memSingleton::Mem_manager::ptr d = m.mymalloc(20 * sizeof(char));
     printf("d:20\n");
-    m.display_mem_map();
+    Mem_manager::ptr d = m.alloc(20 * sizeof(char));
+
+    m.dump();
     printf("\n");
 
-    // m.myfree(b);
+    // m.free(b);
     // printf("free b:20\n");
-    // m.display_mem_map();
+    // m.dump();
     // printf("\n");
 
-    memSingleton::Mem_manager::ptr dd = m.mymalloc(20 * sizeof(char));
+    Mem_manager::ptr dd = m.alloc(20 * sizeof(char));
     printf("dd:20\n");
-    m.display_mem_map();
+    m.dump();
     printf("\n");
 
-    m.myfree(b);
+    m.free(b);
     printf("free b:20\n");
-    m.display_mem_map();
+    m.dump();
     printf("\n");
 
-    memSingleton::Mem_manager::ptr e = m.mymalloc(30 * sizeof(char));
+    Mem_manager::ptr e = m.alloc(30 * sizeof(char));
     printf("e:30\n");
-    m.display_mem_map();
+    m.dump();
     printf("\n");
 
-    m.myfree(d);
+    m.free(d);
     printf("free d:20\n");
-    m.display_mem_map();
+    m.dump();
     printf("\n");
 
-    m.myfree(dd);
+    m.free(dd);
     printf("free dd:20\n");
-    m.display_mem_map();
+    m.dump();
     printf("\n");
 
-    m.myfree(e);
+    m.free(e);
     printf("free e:30\n");
-    m.display_mem_map();
+    m.dump();
     printf("\n");
 
-    m.myfree(c);
+    m.free(c);
     printf("free c:4\n");
-    m.display_mem_map();
+    m.dump();
     printf("\n");
 
-    // m.myfree(d);
+    // m.free(d);
     // printf("free d:20\n");
-    // display_mem_map();
+    // dump();
     // printf("\n");
     // allocate(78);
-    // memSingleton::Mem_manager::ptr a=(char*)m.mymalloc(10*sizeof(char));
-    // display_mem_map();
+    // Mem_manager::ptr a=(char*)m.alloc(10*sizeof(char));
+    // dump();
     // printf("\n");
-    // memSingleton::Mem_manager::ptr b=(char*)m.mymalloc(10*sizeof(char));
-    // display_mem_map();
+    // Mem_manager::ptr b=(char*)m.alloc(10*sizeof(char));
+    // dump();
     // printf("\n");
-    // memSingleton::Mem_manager::ptr c=(char*)m.mymalloc(10*sizeof(char));
-    // display_mem_map();
+    // Mem_manager::ptr c=(char*)m.alloc(10*sizeof(char));
+    // dump();
     // printf("\n");
-    // m.myfree(b);
-    // display_mem_map();
+    // m.free(b);
+    // dump();
     // printf("\n");
 
-    // b=m.mymalloc(5*sizeof(char));
-    // display_mem_map();
+    // b=m.alloc(5*sizeof(char));
+    // dump();
     // printf("\n");
     delete mm;
 }
