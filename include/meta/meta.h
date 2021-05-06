@@ -1,7 +1,9 @@
 #ifndef META_H
 #define META_H
+#include "../mm/mm.h"
 #include <vector>
-using namespace std;    
+using namespace std;
+
 enum Colour
 {
     White,
@@ -12,11 +14,10 @@ enum Colour
 struct MetaData
 {
     bool isfree;
-    int next;
-    Colour c = White;
-    int idx;
-    int owner = -1;
-    vector<int> children;
+    Mem_manager::ptr next; // next meta block
+    Colour colour = White;
+    Mem_manager::ptr owner = -1; // owner meta block
+    vector<Mem_manager::ptr> children; // child meta blocks
 };
 
 #endif

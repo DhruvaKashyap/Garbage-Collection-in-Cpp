@@ -4,10 +4,11 @@
 #include <utility>
 #include <iostream>
 #include <vector>
-#include "../meta/meta.h"
 using namespace std;
 
+class MetaData;
 class policy;
+class Collector;
 class Mem_manager
 {
     char *p;
@@ -18,6 +19,7 @@ class Mem_manager
 
 public:
     friend class memSingleton;
+    friend class Collector;
     using ptr = int;
     using book = MetaData;
     Mem_manager();

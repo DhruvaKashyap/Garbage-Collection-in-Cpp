@@ -37,7 +37,7 @@ Mem_manager::ptr memSingleton::alloc(size_t s)
 
 void memSingleton::free(Mem_manager::ptr n_idx)
 {
-    C.unregisterIndex((MetaData*)(manager.p+n_idx-sizeof(MetaData)),manager.p);
+    C.unregisterIndex((MetaData*)(manager.p+n_idx-sizeof(MetaData)), &manager);
 }
 
 void memSingleton::dump()

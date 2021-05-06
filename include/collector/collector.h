@@ -1,7 +1,7 @@
 #ifndef COLLECTOR_H
 #define COLLECTOR_H
-#include "../mm/mm.h"
 #include "../meta/meta.h"
+
 class Collector
 {
     vector<Mem_manager::ptr> rootSet;
@@ -11,9 +11,9 @@ class Collector
 public:
     void collect();
     void printInfo();
-    void registerIndex(MetaData *meta, int isResource, char *p);
-    void unregisterIndex(MetaData *meta, char *p);
-    int findParent(MetaData &meta, char *p);
+    void registerIndex(MetaData *meta, bool isResource, Mem_manager *m);
+    void unregisterIndex(MetaData *meta, Mem_manager *m);
+    Mem_manager::ptr findParent(MetaData *meta, Mem_manager *m);
 };
 
 #endif

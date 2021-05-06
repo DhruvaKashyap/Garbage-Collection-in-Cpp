@@ -1,4 +1,5 @@
 #include "../../include/mm/mm.h"
+#include "../../include/meta/meta.h"
 #include "../../include/policy/best_fit.h"
 #include <memory>
 #include <iostream>
@@ -13,7 +14,6 @@ Mem_manager::Mem_manager()
     book *b = (book *)p;
     b->next = size;
     b->isfree = 1;
-    b->idx = sizeof(book);
 }
 Mem_manager::~Mem_manager()
 {
@@ -42,7 +42,6 @@ Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block 
         n = (Mem_manager::book *)((char *)target + sizeof(Mem_manager::book) + s); //position of the new Mem_manager::book
         n->isfree = 1;
         n->next = target->next;
-        n->idx = (char *)(n + 1) - p;
         target->next = ((char *)target + sizeof(Mem_manager::book) + s) - p;
     }
     else
@@ -51,7 +50,7 @@ Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block 
         //entire chunk is allocated
         target->isfree = 0;
     }
-    return target->idx; //Mem_manager::book* that points to the required space type casted automatically to void*
+    return (char *)(target + 1) - p; //Mem_manager::book* that points to the required space type casted automatically to void*
 }
 
 void Mem_manager::myfree(Mem_manager::ptr b) //free the block pointed to by the parameter

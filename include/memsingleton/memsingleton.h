@@ -21,12 +21,12 @@ public:
     {
         auto idx = alloc(sizeof(T));
         new (manager.p + idx) T(obj);
-        C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 1, manager.p);
+        C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 1, &manager);
         return idx;
     }
     Mem_manager::ptr copyref(Mem_manager::ptr idx)
     {
-        C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 0, manager.p);
+        C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 0, &manager);
         return idx;
     }
     template <typename T>

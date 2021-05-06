@@ -3,6 +3,7 @@
 
 class X
 {
+    GCBase<double> i;
 public:
     X(int a, int b){};
 };
