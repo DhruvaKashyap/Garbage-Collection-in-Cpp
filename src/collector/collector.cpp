@@ -16,7 +16,7 @@ void Collector::printInfo()
 void Collector::registerIndex(MetaData *meta, bool isResource, Mem_manager *m)
 {
     Mem_manager::ptr parent = findParent(meta, m);
-    Mem_manager::ptr idx = (char*)(meta) - m->p;
+    Mem_manager::ptr idx = (char *)(meta)-m->p;
 
     if (isResource)
         liveResources += 1;
@@ -37,8 +37,8 @@ void Collector::registerIndex(MetaData *meta, bool isResource, Mem_manager *m)
 void Collector::unregisterIndex(MetaData *meta, Mem_manager *m)
 {
     int counts = 0;
-    vector<Mem_manager::ptr> *curr; 
-    Mem_manager::ptr idx = (char*)(meta) - m->p;
+    vector<Mem_manager::ptr> *curr;
+    Mem_manager::ptr idx = (char *)(meta)-m->p;
 
     if (meta->owner == -1)
     {
@@ -69,9 +69,10 @@ void Collector::unregisterIndex(MetaData *meta, Mem_manager *m)
 
 Mem_manager::ptr Collector::findParent(MetaData *meta, Mem_manager *m)
 {
-    char* temp = m->p;
-    while(temp-m->p < m->size)
-    {
-        if(temp+sizeof(MetaData)  &meta && &meta )
-    }
+    // char* temp = m->p;
+    // while(temp-m->p < m->size)
+    // {
+    //     if(temp+sizeof(MetaData)  &meta && &meta )
+    // }
+    return -1;
 }

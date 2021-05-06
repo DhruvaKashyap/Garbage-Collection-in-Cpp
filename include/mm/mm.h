@@ -12,8 +12,7 @@ class Collector;
 class Mem_manager
 {
     char *p;
-    int size;
-    int n = 1000000;
+    int size = 1000000;
     policy *pol;
     const int MAXSIZE = 10000000;
 

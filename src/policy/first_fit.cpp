@@ -1,6 +1,6 @@
 #include "../../include/policy/first_fit.h"
 
-pair<Mem_manager::book *, int> first_fit::find_block(char *p, size_t size, size_t req)
+pair<Mem_manager::book *, size_t> first_fit::find_block(char *p, size_t size, size_t req)
 {
     int chunk_size;
     Mem_manager::book *target;

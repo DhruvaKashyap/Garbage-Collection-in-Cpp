@@ -17,11 +17,11 @@ class memSingleton
 public:
     void free(Mem_manager::ptr n_idx);
     template <typename T>
-    Mem_manager::ptr construct(T obj)
+    Mem_manager::ptr construct(const T *obj)
     {
         auto idx = alloc(sizeof(T));
-        new (manager.p + idx) T(obj);
-        C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 1, &manager);
+        new (manager.p + idx) T(*obj);
+        // C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 1, &manager);
         return idx;
     }
     Mem_manager::ptr copyref(Mem_manager::ptr idx)

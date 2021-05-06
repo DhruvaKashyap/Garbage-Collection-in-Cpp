@@ -8,9 +8,9 @@ using namespace std;
 
 Mem_manager::Mem_manager()
 {
-    n = 100000;
+    size = 100000;
     pol = new best_fit;
-    p = new char[n];
+    p = new char[size];
     book *b = (book *)p;
     b->next = size;
     b->isfree = 1;
@@ -24,8 +24,7 @@ Mem_manager::~Mem_manager()
 Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block of size "s" from p
 {
     Mem_manager::book *target = nullptr; //chunk where pointer is supposed to be allocated memory
-    int found_size = 0;                  //stores the size of the largest empty chunk
-    int chunk_size = 0;                  //stores size of chunk pointed to by pres
+    size_t found_size = 0;               //stores the size of the largest empty chunk
 
     auto pl = pol->find_block(p, size, s);
     target = pl.first;

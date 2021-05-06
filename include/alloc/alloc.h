@@ -19,16 +19,17 @@ requires is_class<T>::value class GCBase<T> : public T
     Mem_manager::ptr idx;
 
 public:
-    template <typename... Args>
-    GCBase(Args &&...args) : T(args...)
+    GCBase(){};
+    template <typename TT, typename... Args>
+    requires (!(is_same_v<TT,GCBase<T>>)) GCBase(TT val, Args &&...args) : T(val, args...)
     {
-        idx = memSingleton::get().construct<GCBase<T>>(*this);
+        idx = memSingleton::get().construct<GCBase<T>>(this);
     }
-    GCBase(const GCBase<T> &copy)
-    {
-        idx = memSingleton::get().copyref(copy.idx);
-    }
-    GCBase& operator=(const GCBase<T> &copy)
+    // GCBase(const GCBase<T> &copy)
+    // {
+    //     idx = memSingleton::get().copyref(copy.idx);
+    // }
+    GCBase &operator=(const GCBase<T> &copy)
     {
         memSingleton::get().free(idx);
         idx = memSingleton::get().copyref(copy.idx);
