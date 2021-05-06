@@ -1,8 +1,24 @@
-#include "mm.h"
+#include "../../include/mm/mm.h"
+#include "../../include/policy/best_fit.h"
 #include <memory>
 #include <iostream>
 #include <cstring>
 using namespace std;
+
+Mem_manager::Mem_manager()
+{
+    n = 100000;
+    policy = new best_fit;
+    p = new char[n];
+    book *b = (book *)p;
+    b->next = size;
+    b->isfree = 1;
+}
+Mem_manager::~Mem_manager()
+{
+    delete policy;
+    delete[] p;
+}
 
 Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block of size "s" from p
 {

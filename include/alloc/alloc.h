@@ -18,8 +18,6 @@ requires is_class<T>::value class GCBase<T> : public T
 {
     // MetaData meta;
     T *ptr_to_mem;
-    int n = 100000;
-    mem_policy *m;
 
 public:
     GCBase(){};
@@ -27,7 +25,7 @@ public:
     GCBase(TT val, Args &&...args) : T(val, args...)
     {
         m = new first_fit;
-        auto &ms = memSingleton::get(n, m);
+        auto &ms = memSingleton::get();
         auto idx = ms.alloc(sizeof(*this));
         ptr_to_mem = ms.construct<GCBase<T>>(idx, *this);
     }
@@ -42,10 +40,3 @@ public:
 };
 
 #endif
-
-/*
-int i=10;
-gc<int> i(10);
-gc<int> j<i>; gc<int> j=i;
-// gc<base> b(gc<Derived>());
-*/

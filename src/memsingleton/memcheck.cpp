@@ -1,10 +1,9 @@
 #include <iostream>
-#include "mm.h"
+#include "../../include/memsingleton/memsingleton.h"
 using namespace std;
 int main()
 {
-    mem_policy *mm = new first_fit;
-    memSingleton &m = memSingleton::get(10, mm);
+    memSingleton &m = memSingleton::get();
     m.dump();
     // m.print_book();
     printf("\n");
@@ -106,5 +105,4 @@ int main()
     // b=m.alloc(5*sizeof(char));
     // dump();
     // printf("\n");
-    delete mm;
 }
