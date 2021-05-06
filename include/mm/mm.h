@@ -54,11 +54,18 @@ public:
     void display_mem_map(); // print the memory array p in the following format
 };
 
-enum Colour
+enum Colour {White, Grey, Black};
+
+class GCBase;
+class MetaData
 {
-    White,
-    Grey,
-    Black
+    friend Collector;
+    friend GCBase;
+    
+    Colour c = White;
+    Mem_manager::ptr idx;
+    Mem_manager::ptr owner = -1;
+    vector<Mem_manager::ptr> children;
 };
 
 // class MetaData
@@ -74,12 +81,81 @@ enum Colour
 
 class Collector
 {
-    //     vector<MetaData> rootSet;
-    //     vector<MetaData> lostResources;
-    //     int liveResources;
+    vector<Mem_manager::ptr> rootSet;
+    vector<Mem_manager::ptr> lostResources;
+    int liveResources;
 public:
     void collect()
     {
+
+    }
+
+    void printInfo()
+    {
+        cout << "Number of references in the root set: " << rootSet.size() <<"\n";
+        cout << "Number of live resources in the heap: " << liveResources <<"\n";
+    }
+
+    void registerIndex(MetaData* meta, int isResource, char* p)
+    {
+        int parent = findParent(meta, p);
+        if(isResource)
+            liveResources += 1;
+        meta->c = Grey;
+        if(parent == -1)
+        {
+            rootSet.push_back(meta);
+        }
+        else
+        {
+            MetaData* temp = (MetaData*)(p + meta->owner);
+            temp->idx = parent;
+            temp->children.push_back(meta->idx);
+        }
+    }
+
+    void unregisterIndex(MetaData* meta, char* p)
+    {
+        int counts = 0;
+
+        if(meta->owner == -1)
+        {
+            auto found = rootSet.end();
+            for(auto it = rootSet.begin(); it != rootSet.end(); it++)
+            {
+                if((*it)->idx == meta->idx)
+                {
+                    counts += 1;
+                    found = it;
+                }
+            }
+            
+            rootSet.erase(found);
+        }
+        else
+        {
+            MetaData* temp = (MetaData*)(p + meta->owner);
+            auto found = temp->children.end();
+            for(auto it = temp->children.begin(); it != temp->children.end(); it++)
+            {
+                if(*it == meta->idx)
+                {
+                    counts += 1;
+                    found = it;
+                }
+            }
+            temp->children.erase(found);
+        }
+
+        if(counts<2)
+        {
+            lostResources.push_back(meta);
+        }
+    }
+
+    int findParent(MetaData& meta, char* p)
+    {
+
     }
     //     void printInfo()
     //     {
