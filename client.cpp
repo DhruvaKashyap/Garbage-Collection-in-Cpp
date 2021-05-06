@@ -1,5 +1,5 @@
 #include <iostream>
-#include "alloc/alloc.h"
+#include "gc.h"
 
 class Y
 {
