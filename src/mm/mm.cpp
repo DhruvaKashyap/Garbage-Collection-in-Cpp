@@ -1,6 +1,6 @@
-#include "../../include/mm/mm.h"
-#include "../../include/meta/meta.h"
-#include "../../include/policy/best_fit.h"
+#include "mm/mm.h"
+#include "meta/meta.h"
+#include "policy/best_fit.h"
 #include <memory>
 #include <iostream>
 #include <cstring>

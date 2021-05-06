@@ -1,6 +1,6 @@
 #ifndef ALLOC_H
 #define ALLOC_H
-#include "../memsingleton/memsingleton.h"
+#include "memsingleton/memsingleton.h"
 #include <concepts>
 using namespace std;
 
@@ -19,16 +19,15 @@ requires is_class<T>::value class GCBase<T> : public T
     Mem_manager::ptr idx;
 
 public:
-    GCBase(){};
-    template <typename TT, typename... Args>
-    requires (!(is_same_v<TT,GCBase<T>>)) GCBase(TT val, Args &&...args) : T(val, args...)
+    template <typename... Args>
+    GCBase(Args &&...args) : T(args...)
     {
-        idx = memSingleton::get().construct<GCBase<T>>(this);
+        idx = memSingleton::get().construct<T>(*(T *)this);
     }
-    // GCBase(const GCBase<T> &copy)
-    // {
-    //     idx = memSingleton::get().copyref(copy.idx);
-    // }
+    GCBase(const GCBase<T> &copy) : T(copy)
+    {
+        idx = memSingleton::get().copyref(copy.idx);
+    }
     GCBase &operator=(const GCBase<T> &copy)
     {
         memSingleton::get().free(idx);

@@ -1,5 +1,5 @@
-#include "../../include/collector/collector.h"
-#include "../../include/meta/meta.h"
+#include "collector/collector.h"
+#include "meta/meta.h"
 #include <iostream>
 using namespace std;
 

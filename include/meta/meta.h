@@ -1,6 +1,6 @@
 #ifndef META_H
 #define META_H
-#include "../mm/mm.h"
+#include "mm/mm.h"
 #include <vector>
 using namespace std;
 

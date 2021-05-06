@@ -1,4 +1,4 @@
-#include "../../include/memsingleton/memsingleton.h"
+#include "memsingleton/memsingleton.h"
 
 memSingleton::memSingleton()
 {

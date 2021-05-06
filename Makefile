@@ -1,27 +1,26 @@
-CXX=g++
-CPPFLAGS = -Wall -std=c++20 -g -pedantic
+OBJS = 	src/mm/mm.o src/policy/first_fit.o src/policy/best_fit.o src/collector/collector.o\
+ 	   	src/memsingleton/memsingleton.o src/policy/policy.o
+HEADERS = 	include/collector/collector.h include/memsingleton/memsingleton.h\
+ 		  	include/mm/mm.h include/policy/best_fit.h include/policy/first_fit.h include/policy/policy.h\
+			include/alloc/alloc.h
+CLIENT = client.cpp
+CXX = g++
+CPPFLAGS = -Wall -std=c++20 -g -pedantic -I include/
 
 all: a.out
 
-a.out: alloctest.o collector.o memsingleton.o mm.o best_fit.o 
-	$(CXX) $(CPPFLAFGS) alloctest.o collector.o memsingleton.o mm.o best_fit.o 
+a.out: client.o gc.a
+	$(CXX) $(CPPFLAFGS) $^ 
 
-alloctest.o: include/alloc/alloc.h src/alloc/alloctest.cpp
-	$(CXX) $(CPPFLAGS) -c src/alloc/alloctest.cpp
+gc.a: $(OBJS)
+	ar -rc gc.a $(OBJS)   
 
-collector.o: include/collector/collector.h src/collector/collector.cpp
-	$(CXX) $(CPPFLAGS) -c src/collector/collector.cpp
+client.o: $(CLIENT) $(HEADERS)
 
-memsingleton.o: include/memsingleton/memsingleton.h src/memsingleton/memsingleton.cpp
-	$(CXX) $(CPPFLAGS) -c src/memsingleton/memsingleton.cpp
+$(OBJS):$(HEADERS)
 
-mm.o: include/mm/mm.h src/mm/mm.cpp
-	$(CXX) $(CPPFLAGS) -c src/mm/mm.cpp
-
-best_fit.o: include/policy/best_fit.h include/policy/policy.h src/policy/best_fit.cpp
-	$(CXX) $(CPPFLAGS) -c src/policy/best_fit.cpp
 
 .PHONY: clean
 
 clean:
-	@rm -f a.out *.o
+	@rm -f a.out $(OBJS) client.o

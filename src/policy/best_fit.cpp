@@ -1,4 +1,4 @@
-#include "../../include/policy/best_fit.h"
+#include "policy/best_fit.h"
 
 pair<Mem_manager::book *, size_t> best_fit::find_block(char *p, size_t size, size_t req)
 {

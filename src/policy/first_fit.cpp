@@ -1,8 +1,8 @@
-#include "../../include/policy/first_fit.h"
+#include "policy/first_fit.h"
 
 pair<Mem_manager::book *, size_t> first_fit::find_block(char *p, size_t size, size_t req)
 {
-    int chunk_size;
+    size_t chunk_size;
     Mem_manager::book *target;
     Mem_manager::book *pres = (Mem_manager::book *)p; //points to the first Mem_manager::book
     while (pres != (Mem_manager::book *)(p + size))

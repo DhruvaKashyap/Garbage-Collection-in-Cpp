@@ -1,6 +1,6 @@
 #ifndef COLLECTOR_H
 #define COLLECTOR_H
-#include "../meta/meta.h"
+#include "meta/meta.h"
 
 class Collector
 {
