@@ -4,6 +4,7 @@
 #include <utility>
 #include "policies/policy.h"
 #include <iostream>
+#include <vector>
 #define MAXSIZE 50
 using namespace std;
 
@@ -45,15 +46,99 @@ public:
     void display_mem_map(); // print the memory array p in the following format
 };
 
+enum Colour {White, Grey, Black};
+
+class MetaData
+{
+    friend Collector;
+    // friend GCBase
+    
+    Colour c = White;
+    Mem_manager::ptr idx;
+    // not suitable
+    Mem_manager::ptr owner = -1;
+    vector<Mem_manager::ptr> children;
+};
+
 class Collector
 {
-    // vector
+    vector<MetaData> rootSet;
+    vector<MetaData> lostResources;
+    int liveResources;
 public:
-    void collect(){};
-    // void print_stats();
-    // register and unregister idx
-    // register subptr
-    // find owner
+    void collect()
+    {
+
+    }
+
+    void printInfo()
+    {
+        cout << "Number of references in the root set: " << rootSet.size() <<"\n";
+        cout << "Number of live resources in the heap: " << liveResources <<"\n";
+    }
+
+    void registerIndex(MetaData& meta, int isResource, char* p)
+    {
+        int parent = findParent(meta.idx);
+        if(isResource)
+            liveResources += 1;
+        meta.c = Grey;
+        if(parent == -1)
+        {
+            rootSet.push_back(meta);
+        }
+        else
+        {
+            MetaData* temp = (MetaData*)(p + meta.owner);
+            temp->idx = parent;
+            temp->children.push_back(meta.idx);
+        }
+    }
+
+    void unregisterIndex(MetaData& meta)
+    {
+        if(meta.owner == -1)
+        {
+            int tmp = 0;
+            auto found = rootSet.end();
+            for(auto it = rootSet.begin(); it != rootSet.end(); it++)
+            {
+                if((*it).idx == meta.idx)
+                {
+                    tmp += 1;
+                    found = it;
+                }
+            }
+            if(tmp<2)
+            {
+                lostResources.push_back(meta);
+            }
+            rootSet.erase(found);
+        }
+        else
+        {
+            int tmp = 0;
+            auto found = meta.owner->children.end();
+            for(auto it = meta.owner->children.begin(); it != meta.owner->children.end(); it++)
+            {
+                if((*it)->idx == meta.idx)
+                {
+                    tmp += 1;
+                    found = it;
+                }
+            }
+            if(tmp<2)
+            {
+                lostResources.push_back(meta);
+            }
+            meta.owner->children.erase(found);
+        } 
+    }
+
+    int findParent(int idx)
+    {
+
+    }
 };
 
 class mem_policy
