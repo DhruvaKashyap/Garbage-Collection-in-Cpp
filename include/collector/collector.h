@@ -1,5 +1,7 @@
 #ifndef COLLECTOR_H
 #define COLLECTOR_H
+#include "../mm/mm.h"
+#include "../meta/meta.h"
 class Collector
 {
     vector<Mem_manager::ptr> rootSet;

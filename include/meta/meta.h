@@ -1,9 +1,7 @@
 #ifndef META_H
 #define META_H
-#include "../collector/collector.h"
-#include "../mm/mm.h"
-#include "../alloc/alloc.h"
-
+#include <vector>
+using namespace std;    
 enum Colour
 {
     White,
@@ -11,17 +9,14 @@ enum Colour
     Black
 };
 
-class MetaData
+struct MetaData
 {
-    friend Collector;
-
-    template <typename T>
-    friend GCBase;
-
+    bool isfree;
+    int next;
     Colour c = White;
-    Mem_manager::ptr idx;
-    Mem_manager::ptr owner = -1;
-    vector<Mem_manager::ptr> children;
+    int idx;
+    int owner = -1;
+    vector<int> children;
 };
 
 #endif

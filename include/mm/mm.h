@@ -2,37 +2,26 @@
 #define MM_H
 #include <climits>
 #include <utility>
-#include "../policy/policy.h"
 #include <iostream>
 #include <vector>
-#define MAXSIZE 10000000
+#include "../meta/meta.h"
 using namespace std;
 
+class policy;
 class Mem_manager
 {
     char *p;
     int size;
     int n = 1000000;
-    mem_policy *policy;
-
-    struct book_t
-    {
-        bool isfree;
-        int next;
-    };
+    policy *pol;
+    const int MAXSIZE = 10000000;
 
 public:
     friend class memSingleton;
     using ptr = int;
-    using book = book_t;
+    using book = MetaData;
     Mem_manager();
     ~Mem_manager();
-    template <typename T>
-    T *construct(ptr pt, T obj)
-    {
-        new (p + pt) T(obj);
-        return (T *)(p + pt);
-    }
     ptr mymalloc(size_t size); //function to allocate a block of size "size" from p
     void expand(size_t size);
     void myfree(ptr n_idx); //free the block pointed to by the parameter

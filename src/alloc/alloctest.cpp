@@ -20,6 +20,7 @@ public:
 
 int main()
 {
+    GCBase<int> c;
     GCBase<Y> a(1);
     GCBase<X> b(1, 2);
     a->hi();

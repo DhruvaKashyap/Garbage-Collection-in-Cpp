@@ -1,8 +1,7 @@
 #include "../../include/memsingleton/memsingleton.h"
 
-memSingleton::memSingleton() : manager()
+memSingleton::memSingleton()
 {
-
 }
 
 memSingleton::~memSingleton()
@@ -12,7 +11,7 @@ memSingleton::~memSingleton()
 Mem_manager::ptr memSingleton::alloc(size_t s)
 {
     auto ret = manager.mymalloc(s);
-    while (ret == -1 && manager.size < MAXSIZE)
+    while (ret == -1 && manager.size < manager.MAXSIZE)
     {
         C.collect();
         ret = manager.mymalloc(s);
@@ -21,7 +20,7 @@ Mem_manager::ptr memSingleton::alloc(size_t s)
             try
             {
                 auto new_size = manager.size * 2;
-                if (new_size > MAXSIZE)
+                if (new_size > manager.MAXSIZE)
                     throw "HEAP SIZE EXCEEDED\n";
                 manager.expand(new_size);
             }
@@ -38,7 +37,7 @@ Mem_manager::ptr memSingleton::alloc(size_t s)
 
 void memSingleton::free(Mem_manager::ptr n_idx)
 {
-    manager.myfree(n_idx);
+    C.unregisterIndex((MetaData*)(manager.p+n_idx-sizeof(MetaData)),manager.p);
 }
 
 void memSingleton::dump()

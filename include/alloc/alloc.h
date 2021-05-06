@@ -1,13 +1,13 @@
 #ifndef ALLOC_H
 #define ALLOC_H
-#include "../mm/mm.h"
+#include "../memsingleton/memsingleton.h"
 #include <concepts>
 using namespace std;
 
 template <typename T>
 class GCBase
 {
-    T *ptr_to_mem;
+    Mem_manager::ptr idx;
 
 public:
     // write all operators
@@ -16,26 +16,30 @@ public:
 template <typename T>
 requires is_class<T>::value class GCBase<T> : public T
 {
-    // MetaData meta;
-    T *ptr_to_mem;
+    Mem_manager::ptr idx;
 
 public:
-    GCBase(){};
-    template <typename TT, typename... Args>
-    GCBase(TT val, Args &&...args) : T(val, args...)
+    template <typename... Args>
+    GCBase(Args &&...args) : T(args...)
     {
-        m = new first_fit;
-        auto &ms = memSingleton::get();
-        auto idx = ms.alloc(sizeof(*this));
-        ptr_to_mem = ms.construct<GCBase<T>>(idx, *this);
+        idx = memSingleton::get().construct<GCBase<T>>(*this);
+    }
+    GCBase(const GCBase<T> &copy)
+    {
+        idx = memSingleton::get().copyref(copy.idx);
+    }
+    GCBase& operator=(const GCBase<T> &copy)
+    {
+        memSingleton::get().free(idx);
+        idx = memSingleton::get().copyref(copy.idx);
     }
     ~GCBase()
     {
-        // delete m;
+        memSingleton::get().free(idx);
     }
     T *operator->()
     {
-        return ptr_to_mem;
+        return memSingleton::get().get_from_mem<T>(idx);
     }
 };
 

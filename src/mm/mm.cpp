@@ -8,15 +8,16 @@ using namespace std;
 Mem_manager::Mem_manager()
 {
     n = 100000;
-    policy = new best_fit;
+    pol = new best_fit;
     p = new char[n];
     book *b = (book *)p;
     b->next = size;
     b->isfree = 1;
+    b->idx = sizeof(book);
 }
 Mem_manager::~Mem_manager()
 {
-    delete policy;
+    delete pol;
     delete[] p;
 }
 
@@ -26,9 +27,9 @@ Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block 
     int found_size = 0;                  //stores the size of the largest empty chunk
     int chunk_size = 0;                  //stores size of chunk pointed to by pres
 
-    auto pol = policy->find_block(p, size, s);
-    target = pol.first;
-    found_size = pol.second;
+    auto pl = pol->find_block(p, size, s);
+    target = pl.first;
+    found_size = pl.second;
     if (found_size == 0 || (found_size < s)) //no free chunks or chunks big enough to allocate memory
     {
         return -1;
@@ -41,6 +42,7 @@ Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block 
         n = (Mem_manager::book *)((char *)target + sizeof(Mem_manager::book) + s); //position of the new Mem_manager::book
         n->isfree = 1;
         n->next = target->next;
+        n->idx = (char *)(n + 1) - p;
         target->next = ((char *)target + sizeof(Mem_manager::book) + s) - p;
     }
     else
@@ -49,7 +51,7 @@ Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block 
         //entire chunk is allocated
         target->isfree = 0;
     }
-    return (char *)(target + 1) - p; //Mem_manager::book* that points to the required space type casted automatically to void*
+    return target->idx; //Mem_manager::book* that points to the required space type casted automatically to void*
 }
 
 void Mem_manager::myfree(Mem_manager::ptr b) //free the block pointed to by the parameter
