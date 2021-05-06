@@ -15,7 +15,7 @@ Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block 
     found_size = pol.second;
     if (found_size == 0 || (found_size < s)) //no free chunks or chunks big enough to allocate memory
     {
-        return size;
+        return -1;
     }
     if (s + sizeof(Mem_manager::book) < found_size) //when the remaining chunk is big enough to store more data
     {
@@ -38,7 +38,7 @@ Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block 
 
 void Mem_manager::myfree(Mem_manager::ptr b) //free the block pointed to by the parameter
 {
-    if (b != size)
+    if (b != -1)
     {
         Mem_manager::book *pres = (Mem_manager::book *)p;
         Mem_manager::book *prev = nullptr;

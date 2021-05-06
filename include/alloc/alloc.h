@@ -14,25 +14,30 @@ public:
 };
 
 template <typename T>
-requires is_class<T>::value 
-class GCBase<T> : public T
+requires is_class<T>::value class GCBase<T> : public T
 {
-    MetaData meta;
+    // MetaData meta;
     T *ptr_to_mem;
-    mem_policy *m;
     int n = 100000;
+    mem_policy *m;
+
 public:
-    GCBase() { m = new first_fit; };
+    GCBase(){};
     template <typename TT, typename... Args>
     GCBase(TT val, Args &&...args) : T(val, args...)
     {
         m = new first_fit;
-        meta.idx = memSingleton::get(n, m).alloc(sizeof(this));
-        // new () GCBase<T> (*this); done by allocator
+        auto &ms = memSingleton::get(n, m);
+        auto idx = ms.alloc(sizeof(*this));
+        ptr_to_mem = ms.construct<GCBase<T>>(idx, *this);
     }
     ~GCBase()
     {
-        delete m;
+        // delete m;
+    }
+    T *operator->()
+    {
+        return ptr_to_mem;
     }
 };
 

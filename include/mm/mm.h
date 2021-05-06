@@ -5,7 +5,7 @@
 #include "policies/policy.h"
 #include <iostream>
 #include <vector>
-#define MAXSIZE 50
+#define MAXSIZE 10000000
 using namespace std;
 
 class memSingleton;
@@ -17,7 +17,7 @@ class Mem_manager
     int size;
     struct book_t
     {
-        int isfree;
+        bool isfree;
         int next;
     };
     mem_policy *policy;
@@ -37,6 +37,14 @@ public:
     {
         delete[] p;
     }
+
+    template <typename T>
+    T *construct(ptr pt, T obj)
+    {
+        new (p + pt) T(obj);
+        return (T*)(p + pt);
+    }
+
     ptr mymalloc(size_t size); //function to allocate a block of size "size" from p
 
     void expand(size_t size);
@@ -46,99 +54,97 @@ public:
     void display_mem_map(); // print the memory array p in the following format
 };
 
-enum Colour {White, Grey, Black};
-
-class MetaData
+enum Colour
 {
-    friend Collector;
-    // friend GCBase
-    
-    Colour c = White;
-    Mem_manager::ptr idx;
-    // not suitable
-    Mem_manager::ptr owner = -1;
-    vector<Mem_manager::ptr> children;
+    White,
+    Grey,
+    Black
 };
+
+// class MetaData
+// {
+//     friend Collector;
+//     // friend GCBase
+//     Colour c = White;
+//     Mem_manager::ptr idx;
+//     // not suitable
+//     Mem_manager::ptr owner = -1;
+//     vector<Mem_manager::ptr> children;
+// };
 
 class Collector
 {
-    vector<MetaData> rootSet;
-    vector<MetaData> lostResources;
-    int liveResources;
+    //     vector<MetaData> rootSet;
+    //     vector<MetaData> lostResources;
+    //     int liveResources;
 public:
     void collect()
     {
-
     }
-
-    void printInfo()
-    {
-        cout << "Number of references in the root set: " << rootSet.size() <<"\n";
-        cout << "Number of live resources in the heap: " << liveResources <<"\n";
-    }
-
-    void registerIndex(MetaData& meta, int isResource, char* p)
-    {
-        int parent = findParent(meta.idx);
-        if(isResource)
-            liveResources += 1;
-        meta.c = Grey;
-        if(parent == -1)
-        {
-            rootSet.push_back(meta);
-        }
-        else
-        {
-            MetaData* temp = (MetaData*)(p + meta.owner);
-            temp->idx = parent;
-            temp->children.push_back(meta.idx);
-        }
-    }
-
-    void unregisterIndex(MetaData& meta)
-    {
-        if(meta.owner == -1)
-        {
-            int tmp = 0;
-            auto found = rootSet.end();
-            for(auto it = rootSet.begin(); it != rootSet.end(); it++)
-            {
-                if((*it).idx == meta.idx)
-                {
-                    tmp += 1;
-                    found = it;
-                }
-            }
-            if(tmp<2)
-            {
-                lostResources.push_back(meta);
-            }
-            rootSet.erase(found);
-        }
-        else
-        {
-            int tmp = 0;
-            auto found = meta.owner->children.end();
-            for(auto it = meta.owner->children.begin(); it != meta.owner->children.end(); it++)
-            {
-                if((*it)->idx == meta.idx)
-                {
-                    tmp += 1;
-                    found = it;
-                }
-            }
-            if(tmp<2)
-            {
-                lostResources.push_back(meta);
-            }
-            meta.owner->children.erase(found);
-        } 
-    }
-
-    int findParent(int idx)
-    {
-
-    }
+    //     void printInfo()
+    //     {
+    //         cout << "Number of references in the root set: " << rootSet.size() <<"\n";
+    //         cout << "Number of live resources in the heap: " << liveResources <<"\n";
+    //     }
+    //     void registerIndex(MetaData& meta, int isResource, char* p)
+    //     {
+    //         int parent = findParent(meta.idx);
+    //         if(isResource)
+    //             liveResources += 1;
+    //         meta.c = Grey;
+    //         if(parent == -1)
+    //         {
+    //             rootSet.push_back(meta);
+    //         }
+    //         else
+    //         {
+    //             MetaData* temp = (MetaData*)(p + meta.owner);
+    //             temp->idx = parent;
+    //             temp->children.push_back(meta.idx);
+    //         }
+    //     }
+    //     void unregisterIndex(MetaData& meta)
+    //     {
+    //         if(meta.owner == -1)
+    //         {
+    //             int tmp = 0;
+    //             auto found = rootSet.end();
+    //             for(auto it = rootSet.begin(); it != rootSet.end(); it++)
+    //             {
+    //                 if((*it).idx == meta.idx)
+    //                 {
+    //                     tmp += 1;
+    //                     found = it;
+    //                 }
+    //             }
+    //             if(tmp<2)
+    //             {
+    //                 lostResources.push_back(meta);
+    //             }
+    //             rootSet.erase(found);
+    //         }
+    //         else
+    //         {
+    //             int tmp = 0;
+    //             auto found = meta.owner->children.end();
+    //             for(auto it = meta.owner->children.begin(); it != meta.owner->children.end(); it++)
+    //             {
+    //                 if((*it)->idx == meta.idx)
+    //                 {
+    //                     tmp += 1;
+    //                     found = it;
+    //                 }
+    //             }
+    //             if(tmp<2)
+    //             {
+    //                 lostResources.push_back(meta);
+    //             }
+    //             meta.owner->children.erase(found);
+    //         }
+    //     }
+    //     int findParent(int idx)
+    //     {
+    //     }
 };
 
 class mem_policy
@@ -206,11 +212,11 @@ public:
     Mem_manager::ptr alloc(size_t s)
     {
         auto ret = manager.mymalloc(s);
-        while (ret == manager.size && manager.size < MAXSIZE)
+        while (ret == -1 && manager.size < MAXSIZE)
         {
             C.collect();
             ret = manager.mymalloc(s);
-            if (ret == manager.size)
+            if (ret == -1)
             {
                 try
                 {
@@ -232,6 +238,11 @@ public:
     void free(Mem_manager::ptr n_idx)
     {
         manager.myfree(n_idx);
+    }
+    template <typename T>
+    T *construct(Mem_manager::ptr idx, T obj)
+    {
+        return manager.construct<T>(idx, obj);
     }
     void dump()
     {
