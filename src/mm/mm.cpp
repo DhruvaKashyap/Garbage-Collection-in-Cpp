@@ -8,7 +8,7 @@ using namespace std;
 
 Mem_manager::Mem_manager()
 {
-    size = 100000;
+    size = 100;
     pol = new best_fit;
     p = new char[size];
     book *b = (book *)p;

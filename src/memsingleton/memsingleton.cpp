@@ -13,7 +13,7 @@ Mem_manager::ptr memSingleton::alloc(size_t s)
     auto ret = manager.mymalloc(s);
     while (ret == -1 && manager.size < manager.MAXSIZE)
     {
-        C.collect();
+        C.collect(&manager);
         ret = manager.mymalloc(s);
         if (ret == -1)
         {

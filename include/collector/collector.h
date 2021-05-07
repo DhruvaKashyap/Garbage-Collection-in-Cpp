@@ -1,19 +1,18 @@
 #ifndef COLLECTOR_H
 #define COLLECTOR_H
 #include "meta/meta.h"
+#include <vector>
 
 class Collector
 {
-    vector<Mem_manager::ptr> rootSet;
-    vector<Mem_manager::ptr> lostResources;
+    vector<Mem_manager::ptr> references;
     int liveResources;
 
 public:
-    void collect();
+    void collect(Mem_manager *m);
     void printInfo();
     void registerIndex(MetaData *meta, bool isResource, Mem_manager *m);
     void unregisterIndex(MetaData *meta, Mem_manager *m);
-    Mem_manager::ptr findParent(MetaData *meta, Mem_manager *m);
 };
 
 #endif

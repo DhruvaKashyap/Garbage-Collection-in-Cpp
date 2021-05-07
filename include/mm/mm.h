@@ -12,9 +12,9 @@ class Collector;
 class Mem_manager
 {
     char *p;
-    int size = 1000000;
+    int size;
     policy *pol;
-    const int MAXSIZE = 10000000;
+    const int MAXSIZE = 100000000;
 
 public:
     friend class memSingleton;
