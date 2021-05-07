@@ -1,6 +1,7 @@
 #include "mm/mm.h"
 #include "meta/meta.h"
 #include "policy/best_fit.h"
+#include "policy/first_fit.h"
 #include <memory>
 #include <iostream>
 #include <cstring>

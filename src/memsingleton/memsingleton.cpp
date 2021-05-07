@@ -1,11 +1,14 @@
 #include "memsingleton/memsingleton.h"
-
+#include <iostream>
+using namespace std;
 memSingleton::memSingleton()
 {
 }
 
 memSingleton::~memSingleton()
 {
+    C.collect(&manager);
+    print_info();
 }
 
 Mem_manager::ptr memSingleton::alloc(size_t s)
@@ -14,6 +17,7 @@ Mem_manager::ptr memSingleton::alloc(size_t s)
     while (ret == -1 && manager.size < manager.MAXSIZE)
     {
         C.collect(&manager);
+        print_info();
         ret = manager.mymalloc(s);
         if (ret == -1)
         {
@@ -35,9 +39,13 @@ Mem_manager::ptr memSingleton::alloc(size_t s)
     return ret;
 }
 
-void memSingleton::dump()
+void memSingleton::print_info()
 {
+    cout << "---------------------------------------------\n";
     manager.display_mem_map();
+    cout << "---------------------------------------------\n";
+    C.printInfo();
+    cout << "---------------------------------------------\n\n\n";
 }
 
 memSingleton &memSingleton::get()

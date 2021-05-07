@@ -5,17 +5,20 @@ using namespace std;
 
 void Collector::collect(Mem_manager *m)
 {
-    char* temp = m->p;
-    while(temp - m->p < m->size)
+    char *temp = m->p;
+    cout << "***Cleaning memory***\n";
+    while (temp != (m->p + m->size))
     {
-        MetaData* meta = (MetaData*)temp;
-        if(!meta->isfree)
+        MetaData *meta = (MetaData *)temp;
+        if (!(meta->isfree))
         {
-            if(find(references.begin(), references.end(), temp - m->p) == references.end())
+            if (find(references.begin(), references.end(), temp - m->p) == references.end())
             {
                 m->myfree(temp + sizeof(MetaData) - m->p);
+                liveResources -= 1;
             }
         }
+        temp = m->p + meta->next;
     }
 }
 

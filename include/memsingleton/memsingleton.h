@@ -12,15 +12,14 @@ class memSingleton
     ~memSingleton();
     // has to take care of doing placement new, register owner and what not
     Mem_manager::ptr alloc(size_t s);
-    void dump();
 
 public:
-    template <typename T>
-    Mem_manager::ptr construct(const T &obj)
+    template <typename T, typename TT, typename... Args>
+    Mem_manager::ptr construct(TT val, Args &&...args)
     {
         auto idx = alloc(sizeof(T));
-        new (manager.p + idx) T(obj);
         C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 1, &manager);
+        new (manager.p + idx) T(val, args...);
         return idx;
     }
     Mem_manager::ptr copyref(Mem_manager::ptr idx)
@@ -39,7 +38,7 @@ public:
         ((T *)(manager.p + n_idx))->~T();
         C.unregisterIndex((MetaData *)(manager.p + n_idx - sizeof(MetaData)), &manager);
     }
-
+    void print_info();
     static memSingleton &get();
 };
 #endif

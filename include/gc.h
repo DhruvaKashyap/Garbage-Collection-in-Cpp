@@ -2,6 +2,7 @@
 #define ALLOC_H
 #include "memsingleton/memsingleton.h"
 #include <concepts>
+#include <iostream>
 using namespace std;
 
 template <typename T>
@@ -143,8 +144,7 @@ public:
     template <typename TT, typename... Args>
     requires(!is_same_v<TT, GCBase<T>>) GCBase(TT val, Args &&...args)
     {
-        T obj(val, args...);
-        idx = memSingleton::get().construct<T>(obj);
+        idx = memSingleton::get().construct<T>(val, args...);
     }
     GCBase<T> &operator=(const GCBase<T> &copy)
     {
@@ -163,7 +163,7 @@ public:
     {
         return memSingleton::get().get_from_mem<T>(idx);
     }
-    T obj()
+    operator T()
     {
         return *memSingleton::get().get_from_mem<T>(idx);
     }

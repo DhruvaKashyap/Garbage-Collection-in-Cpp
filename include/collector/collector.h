@@ -6,7 +6,7 @@
 class Collector
 {
     vector<Mem_manager::ptr> references;
-    int liveResources;
+    int liveResources = 0;
 
 public:
     void collect(Mem_manager *m);

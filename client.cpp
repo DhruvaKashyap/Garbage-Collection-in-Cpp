@@ -1,96 +1,103 @@
 #include <iostream>
 #include "gc.h"
-#include <string>
 using namespace std;
 
-class Z
+class X
 {
-    double ff = 20.0;
+    int a;
 
 public:
-    Z(double f = 20.0) : ff(f) { cout << "ctor z\n"; }
-    void hi()
+    X() { a = 10; }
+    X(int n) : a(n){};
+    void f()
     {
-        cout << "zz " << ff << '\n';
+        cout << "This is X(" << a << ")\n";
     }
-    ~Z()
+    friend ostream &operator<<(ostream &o, const X &x)
     {
-        cout << "dtor z\n";
+        return o << x.a;
     }
 };
 
 class Y
 {
-    int aa;
-    GCBase<Z> i;
+    int b;
+    GCBase<X> x;
 
 public:
-    Y(int a) : aa(a) { cout << "ctor Y\n"; };
-    ~Y()
+    Y(int n) : b(n), x(n + 1){};
+    void f()
     {
-        cout << "dtor y\n";
-    }
-    void hi()
-    {
-        i->hi();
-        cout << "hi " << aa << "\n";
+        cout << "This is Y(" << b << ")\n";
+        x->f();
     }
 };
 
-class X
+class Z
 {
-    GCBase<Y> i;
-    int k;
+    int c;
+    GCBase<X> x;
+    GCBase<Y> y;
 
 public:
-    X(int a, int b) : i(a), k(b) { cout << "ctor X\n"; };
-    ~X()
+    Z(int n) : c(n), x(n + 1), y(n + 2){};
+    void f()
     {
-        cout << "dtor x\n";
+        cout << "This is Z(" << c << ")\n";
+        x->f();
+        y->f();
     }
-    void hi()
-    {
-        i->hi();
-        cout << k << '\n';
-    }
-};
-
-class A
-{
-    int a;
-
-public:
-    virtual void f() { cout << "A\n"; };
-};
-class B : public A
-{
-
-public:
-    virtual void f() { cout << "B\n"; };
 };
 
 int main()
 {
-    // GCBase<int> a = 1;
-    // GCBase<int> b = 68;
-    // GCBase<int> c = 419;
-    // GCBase<Y> y(420);
-    // cout << "----------------------------------------\n";
-    // GCBase<Y> j(100);
-    // j = y;
-    // GCBase<X> x(69, 2);
-    GCBase<int> j(0);
-    GCBase<int> i(10);
-    cout << i << '\t' << j << '\n';
-    j += i;
-    i += 11;
-    cout << i << '\t' << j << '\n';
-    // y->hi();
-    // x->hi();
-    // cout << c << '\n';
-    // c = a + b;
-    // c++;
-    // cout << c << '\n';
-    // GCBase<string> s1("a");
-    // GCBase<string> s2("b");
+    //Simple types
+    cout << "Simple Integers a; b; c\n";
+    {
+        GCBase<int> a = 0;
+        GCBase<int> b = 1;
+        GCBase<int> c = 1;
+        cout << "a: " << a << '\n';
+        cout << "b: " << b << '\n';
+        cout << "c: " << c << '\n';
+        memSingleton::get().print_info();
+    }
+    cout << "Destructing a; b; c\n";
+    memSingleton::get().print_info();
+
+    // Basic class
+    cout << "Basic Class x\n";
+    {
+        GCBase<X> x(2);
+        x->f();
+        cout << "x:" << x << '\n';
+        memSingleton::get().print_info();
+    }
+    cout << "Destructing x\n";
+    memSingleton::get().print_info();
+
+    // Nested class
+    cout << "Nested Class y\n";
+    {
+        GCBase<Y> y(3);
+        y->f();
+        memSingleton::get().print_info();
+    }
+    cout << "Destructing class y\n";
+    memSingleton::get().print_info();
+
+    // Nested class with Multiple references
+    cout << "Nested Class with multiple references\n";
+    {
+        GCBase<Z> z(5);
+        z->f();
+        memSingleton::get().print_info();
+    }
+    cout << "Destructing class z\n";
+    memSingleton::get().print_info();
+
+    // Assignment and copy ctors
+    {
+        
+    }
 }
