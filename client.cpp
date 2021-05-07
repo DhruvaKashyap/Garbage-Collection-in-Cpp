@@ -36,14 +36,15 @@ public:
 class Z
 {
     int c;
+    string d;
     GCBase<X> x;
     GCBase<Y> y;
 
 public:
-    Z(int n) : c(n), x(n + 1), y(n + 2){};
+    Z(int n, string a) : c(n), d(a), x(n + 1), y(n + 2){};
     void f()
     {
-        cout << "This is Z(" << c << ")\n";
+        cout << "This is Z(" << c << "," << d << ")\n";
         x->f();
         y->f();
     }
@@ -76,7 +77,7 @@ int main()
         GCBase<int> a = 0;
         GCBase<int> b = 1;
         GCBase<int> c = 1;
-        a++;
+        ++a;
         b = 1729;
         c = b * a;
         cout << "a: " << a << '\n';
@@ -111,7 +112,7 @@ int main()
     // Nested class with Multiple references
     cout << "Nested Class with multiple references\n";
     {
-        GCBase<Z> z(5);
+        GCBase<Z> z(5, "Malleshwaram");
         z->f();
         memSingleton::get().print_info();
     }
@@ -121,7 +122,7 @@ int main()
     // Copy Ctors
     cout << "Nested Class with multiple references and copy ctor\n";
     {
-        GCBase<Z> z1(9);
+        GCBase<Z> z1(9, "Halli mane");
         GCBase<Z> z2(z1);
         z1->f();
         z2->f();
@@ -131,7 +132,7 @@ int main()
     memSingleton::get().print_info();
 
     // Assignment operator
-    cout << "Nested Class with multiple references\n";
+    cout << "Nested Class with multiple references, assignment operator\n";
     {
         GCBase<Y> y1(20);
         GCBase<Y> y2(30);
@@ -143,6 +144,7 @@ int main()
         y1->f();
         cout << "------\n";
         y2->f();
+        cout << "-----------\n";
         memSingleton::get().print_info();
     }
     cout << "Destructing class y1 and y2\n";

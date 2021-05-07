@@ -108,3 +108,13 @@ Complex resources
 # Class has to be canonical
 
 # references must always be initialized
+
+1. Flash Diagrams
+2. Simple mark and sweep
+3. Interface
+	mention memory buffer
+4. Client
+	placement new
+	explicit dtors
+	heap expansion and limit
+5. UML

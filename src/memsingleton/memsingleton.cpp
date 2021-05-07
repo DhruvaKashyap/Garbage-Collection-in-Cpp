@@ -7,6 +7,7 @@ memSingleton::memSingleton()
 
 memSingleton::~memSingleton()
 {
+    C.cleanUp();
     C.collect(&manager);
     cout << "FINAL COLLECT COMPLETE\n";
     print_info();

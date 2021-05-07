@@ -45,3 +45,8 @@ void Collector::unregisterIndex(MetaData *meta, Mem_manager *m)
     if (i != references.end())
         references.erase(i);
 }
+
+void Collector::cleanUp()
+{
+    references.clear();
+}

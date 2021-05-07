@@ -13,6 +13,7 @@ public:
     void printInfo();
     void registerIndex(MetaData *meta, bool isResource, Mem_manager *m);
     void unregisterIndex(MetaData *meta, Mem_manager *m);
+    void cleanUp();
 };
 
 #endif
