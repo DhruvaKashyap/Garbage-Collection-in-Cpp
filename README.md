@@ -104,3 +104,5 @@ Problems:
 Derived to base conversion
 
 Complex resources
+
+# Class has to be canonical

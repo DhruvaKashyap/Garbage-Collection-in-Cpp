@@ -9,11 +9,11 @@ CPPFLAGS = -Wall -std=c++20 -g -pedantic -I include/
 
 all: a.out
 
-a.out: client.o gc.a
-	$(CXX) $(CPPFLAFGS) $^ 
+a.out: client.o libgc.a
+	$(CXX) $(CPPFLAFGS) client.o -L. -lgc
 
-gc.a: $(OBJS)
-	ar -rc gc.a $(OBJS)   
+libgc.a: $(OBJS)
+	ar -rc libgc.a $(OBJS)   
 
 client.o: $(CLIENT) $(HEADERS)
 
