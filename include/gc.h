@@ -20,8 +20,11 @@ public:
     }
     GCBase &operator=(const GCBase<T> &copy)
     {
-        memSingleton::get().free<T>(idx);
-        idx = memSingleton::get().copyref(copy.idx);
+        if ((*this).idx != copy.idx)
+        {
+            memSingleton::get().free<T>(idx);
+            idx = memSingleton::get().copyref(copy.idx);
+        }
         return *this;
     }
     ~GCBase()
@@ -90,6 +93,36 @@ public:
         GCBase<T> temp = *this;
         --*this;
         return temp;
+    }
+    friend GCBase<T> operator%(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return T(lhs) % T(rhs);
+    }
+    friend GCBase<T> operator/(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return T(lhs) / T(rhs);
+    }
+    friend GCBase<T> operator^(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return T(lhs) ^ T(rhs);
+    }
+    friend GCBase<T> operator<<(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return T(lhs) << T(rhs);
+    }
+    friend GCBase<T> operator>>(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return T(lhs) >> T(rhs);
+    }
+    friend GCBase<T> operator~(const GCBase<T> &lhs)
+    {
+        return ~T(lhs);
+    }
+    GCBase<T> operator+=(const GCBase<T> &rhs)
+    {
+        T *temp = memSingleton::get().get_from_mem<T>(idx);
+        (*temp) += T(rhs);
+        return *this;
     }
 };
 

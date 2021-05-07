@@ -76,9 +76,15 @@ int main()
     // GCBase<int> c = 419;
     // GCBase<Y> y(420);
     // cout << "----------------------------------------\n";
-    GCBase<Y> j(100);
+    // GCBase<Y> j(100);
     // j = y;
-    GCBase<X> x(69, 2);
+    // GCBase<X> x(69, 2);
+    GCBase<int> j(0);
+    GCBase<int> i(10);
+    cout << i << '\t' << j << '\n';
+    j += i;
+    i += 11;
+    cout << i << '\t' << j << '\n';
     // y->hi();
     // x->hi();
     // cout << c << '\n';

@@ -20,12 +20,12 @@ public:
     {
         auto idx = alloc(sizeof(T));
         new (manager.p + idx) T(obj);
-        // C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 1, &manager);
+        C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 1, &manager);
         return idx;
     }
     Mem_manager::ptr copyref(Mem_manager::ptr idx)
     {
-        // C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 0, &manager);
+        C.registerIndex((MetaData *)(manager.p + idx - sizeof(MetaData)), 0, &manager);
         return idx;
     }
     template <typename T>
@@ -36,8 +36,8 @@ public:
     template <typename T>
     void free(Mem_manager::ptr n_idx)
     {
-        // C.unregisterIndex((MetaData *)(manager.p + n_idx - sizeof(MetaData)), &manager);
         ((T *)(manager.p + n_idx))->~T();
+        C.unregisterIndex((MetaData *)(manager.p + n_idx - sizeof(MetaData)), &manager);
     }
 
     static memSingleton &get();

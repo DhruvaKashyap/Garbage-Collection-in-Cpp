@@ -5,7 +5,7 @@ HEADERS = 	include/collector/collector.h include/memsingleton/memsingleton.h\
 			include/gc.h
 CLIENT = client.cpp
 CXX = g++
-CPPFLAGS = -Wall -std=c++20 -g -pedantic -I include/
+CPPFLAGS = -O3 -Wall -std=c++20 -g -pedantic -I include/
 
 all: a.out
 
