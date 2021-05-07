@@ -10,7 +10,7 @@ class GCBase
     Mem_manager::ptr idx;
 
 public:
-    GCBase(T p = T())
+    GCBase(T p)
     {
         idx = memSingleton::get().construct<T>(p);
     }
@@ -20,22 +20,76 @@ public:
     }
     GCBase &operator=(const GCBase<T> &copy)
     {
-        memSingleton::get().free(idx);
+        memSingleton::get().free<T>(idx);
         idx = memSingleton::get().copyref(copy.idx);
         return *this;
     }
     ~GCBase()
     {
-        memSingleton::get().free(idx);
+        memSingleton::get().free<T>(idx);
     }
     operator T() const
     {
         return *memSingleton::get().get_from_mem<T>(idx);
     }
-    //operator+,-,==,!=
+
     friend GCBase<T> operator+(const GCBase<T> &lhs, const GCBase<T> &rhs)
     {
-        return T(lhs)+T(rhs);
+        return T(lhs) + T(rhs);
+    }
+    friend GCBase<T> operator-(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return T(lhs) - T(rhs);
+    }
+    friend GCBase<T> operator*(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return T(lhs) * T(rhs);
+    }
+    friend GCBase<T> operator==(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return (T(lhs) == T(rhs));
+    }
+    friend GCBase<T> operator!=(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return !(T(lhs) == T(rhs));
+    }
+    friend bool operator<(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return (T(lhs) < T(rhs));
+    }
+    friend bool operator<=(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return !(T(lhs) > T(rhs));
+    }
+    friend bool operator>(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return rhs < lhs;
+    }
+    friend bool operator>=(const GCBase<T> &lhs, const GCBase<T> &rhs)
+    {
+        return !(lhs < rhs);
+    }
+    GCBase<T> &operator++()
+    {
+        ++(*memSingleton::get().get_from_mem<T>(idx));
+        return *this;
+    }
+    GCBase<T> operator++(int)
+    {
+        GCBase<T> temp = *this;
+        ++*this;
+        return temp;
+    }
+    GCBase<T> &operator--()
+    {
+        --(*memSingleton::get().get_from_mem<T>(idx));
+        return *this;
+    }
+    GCBase<T> operator--(int)
+    {
+        GCBase<T> temp = *this;
+        --*this;
+        return temp;
     }
 };
 
@@ -45,29 +99,40 @@ requires is_class<T>::value class GCBase<T>
     Mem_manager::ptr idx;
 
 public:
-    template <typename... Args>
-    GCBase(Args &&...args)
+    GCBase()
     {
-        T obj(args...);
-        idx = memSingleton::get().construct<T>(obj);
-    }
+        idx = memSingleton::get().construct<T>(T());
+    };
     GCBase(const GCBase<T> &copy)
     {
         idx = memSingleton::get().copyref(copy.idx);
     }
-    GCBase &operator=(const GCBase<T> &copy)
+    template <typename TT, typename... Args>
+    requires(!is_same_v<TT, GCBase<T>>) GCBase(TT val, Args &&...args)
     {
-        memSingleton::get().free(idx);
-        idx = memSingleton::get().copyref(copy.idx);
+        T obj(val, args...);
+        idx = memSingleton::get().construct<T>(obj);
+    }
+    GCBase<T> &operator=(const GCBase<T> &copy)
+    {
+        if ((*this).idx != copy.idx)
+        {
+            memSingleton::get().free<T>(idx);
+            idx = memSingleton::get().copyref(copy.idx);
+        }
         return *this;
     }
     ~GCBase()
     {
-        memSingleton::get().free(idx);
+        memSingleton::get().free<T>(idx);
     }
     T *operator->()
     {
         return memSingleton::get().get_from_mem<T>(idx);
+    }
+    T obj()
+    {
+        return *memSingleton::get().get_from_mem<T>(idx);
     }
 };
 #endif
