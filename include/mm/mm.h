@@ -19,6 +19,8 @@ class Mem_manager
 public:
     friend class memSingleton;
     friend class Collector;
+    friend class best_fit;
+    friend class first_fit;
     using ptr = int;
     using book = MetaData;
     Mem_manager();

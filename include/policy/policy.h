@@ -9,7 +9,7 @@ class policy
 {
 public:
     virtual ~policy();
-    virtual pair<Mem_manager::book* , size_t> find_block(char *p, size_t size, size_t req) = 0;
+    virtual pair<Mem_manager::book* , size_t> find_block(Mem_manager *m, const size_t req) = 0;
 };
 
 

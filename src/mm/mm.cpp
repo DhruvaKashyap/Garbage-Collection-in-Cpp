@@ -27,7 +27,7 @@ Mem_manager::ptr Mem_manager::mymalloc(size_t s) //function to allocate a block 
     Mem_manager::book *target = nullptr; //chunk where pointer is supposed to be allocated memory
     size_t found_size = 0;               //stores the size of the largest empty chunk
 
-    auto pl = pol->find_block(p, size, s);
+    auto pl = pol->find_block(this, s);
     target = pl.first;
     found_size = pl.second;
     if (found_size == 0 || (found_size < s)) //no free chunks or chunks big enough to allocate memory
@@ -105,7 +105,7 @@ void Mem_manager::display_mem_map() // print the memory array p
 void Mem_manager::expand(size_t sizen)
 {
     char *newloc = new char[sizen];
-    for (int i = 0; i < size; ++i)
+    for (auto i = 0; i < size; ++i)
         newloc[i] = p[i];
     Mem_manager::book *ff = (Mem_manager::book *)newloc;
     Mem_manager::book *lastbook = (Mem_manager::book *)newloc;

@@ -57,6 +57,9 @@ int main()
         GCBase<int> a = 0;
         GCBase<int> b = 1;
         GCBase<int> c = 1;
+        a++;
+        b = 1729;
+        c = b * a;
         cout << "a: " << a << '\n';
         cout << "b: " << b << '\n';
         cout << "c: " << c << '\n';
@@ -98,6 +101,5 @@ int main()
 
     // Assignment and copy ctors
     {
-        
     }
 }
