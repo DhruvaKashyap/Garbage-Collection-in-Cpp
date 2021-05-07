@@ -54,6 +54,7 @@ class A
     int a;
 
 public:
+    A(int n) : a(n){};
     virtual ~A(){};
     virtual void f() { cout << "A\n"; };
 };
@@ -63,6 +64,7 @@ class B : public A
     int b;
 
 public:
+    B(int n) : A(n), b(n){};
     virtual void f() { cout << "B\n"; };
 };
 
@@ -134,9 +136,12 @@ int main()
         GCBase<Y> y1(20);
         GCBase<Y> y2(30);
         y1->f();
+        cout << "------\n";
         y2->f();
         y1 = y2;
+        cout << "-----------\n";
         y1->f();
+        cout << "------\n";
         y2->f();
         memSingleton::get().print_info();
     }
@@ -158,5 +163,16 @@ int main()
         memSingleton::get().print_info();
     }
     cout << "Destructing class x{1..9}\n";
+    memSingleton::get().print_info();
+
+    //Inheritance
+    cout << "Inheritance(Experimental Interface)\n";
+    {
+        GCBase<B> y(1);
+        GCBase<A> *a = (GCBase<A> *)&y;
+        (*a)->f();
+        memSingleton::get().print_info();
+    }
+    cout << "Destructing Inheritance classes\n";
     memSingleton::get().print_info();
 }
