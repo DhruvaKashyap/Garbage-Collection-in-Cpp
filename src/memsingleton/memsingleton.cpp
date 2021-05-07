@@ -8,15 +8,17 @@ memSingleton::memSingleton()
 memSingleton::~memSingleton()
 {
     C.collect(&manager);
+    cout << "FINAL COLLECT COMPLETE\n";
     print_info();
 }
 
 Mem_manager::ptr memSingleton::alloc(size_t s)
 {
     auto ret = manager.mymalloc(s);
+    if (ret == -1)
+        C.collect(&manager);
     while (ret == -1 && manager.size < manager.MAXSIZE)
     {
-        C.collect(&manager);
         print_info();
         ret = manager.mymalloc(s);
         if (ret == -1)
@@ -33,7 +35,7 @@ Mem_manager::ptr memSingleton::alloc(size_t s)
                 cout << a;
                 exit(0);
             }
-            manager.display_mem_map();
+            cout << "******Expanding memory*******\n";
         }
     }
     return ret;

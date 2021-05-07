@@ -41,5 +41,7 @@ void Collector::registerIndex(MetaData *meta, bool isResource, Mem_manager *m)
 void Collector::unregisterIndex(MetaData *meta, Mem_manager *m)
 {
     Mem_manager::ptr idx = (char *)(meta)-m->p;
-    references.erase(find(references.begin(), references.end(), idx));
+    auto i = find(references.begin(), references.end(), idx);
+    if (i != references.end())
+        references.erase(i);
 }

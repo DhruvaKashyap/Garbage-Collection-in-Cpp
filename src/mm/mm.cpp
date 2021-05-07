@@ -105,14 +105,15 @@ void Mem_manager::display_mem_map() // print the memory array p
 void Mem_manager::expand(size_t sizen)
 {
     char *newloc = new char[sizen];
-    for (auto i = 0; i < size; ++i)
-        newloc[i] = p[i];
-    Mem_manager::book *ff = (Mem_manager::book *)newloc;
-    Mem_manager::book *lastbook = (Mem_manager::book *)newloc;
-    while (ff != (Mem_manager::book *)(newloc + size))
+    memmove(newloc, p, size);
+    delete[] p;
+    p = newloc;
+    Mem_manager::book *ff = (Mem_manager::book *)p;
+    Mem_manager::book *lastbook = (Mem_manager::book *)p;
+    while (ff != (Mem_manager::book *)(p + size))
     {
         lastbook = ff;
-        ff = (Mem_manager ::book *)(newloc + ff->next);
+        ff = (Mem_manager ::book *)(p + ff->next);
     }
     if (lastbook->isfree)
     {
@@ -120,11 +121,9 @@ void Mem_manager::expand(size_t sizen)
     }
     else
     {
-        Mem_manager::book *new_book = (Mem_manager::book *)(newloc + size);
+        Mem_manager::book *new_book = (Mem_manager::book *)(p + size);
         new_book->isfree = 1;
         new_book->next = sizen;
     }
-    delete[] p;
     size = sizen;
-    p = newloc;
 }

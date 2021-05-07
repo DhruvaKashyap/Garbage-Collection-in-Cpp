@@ -49,9 +49,26 @@ public:
     }
 };
 
+class A
+{
+    int a;
+
+public:
+    virtual ~A(){};
+    virtual void f() { cout << "A\n"; };
+};
+
+class B : public A
+{
+    int b;
+
+public:
+    virtual void f() { cout << "B\n"; };
+};
+
 int main()
 {
-    //Simple types
+    // Simple types
     cout << "Simple Integers a; b; c\n";
     {
         GCBase<int> a = 0;
@@ -99,7 +116,47 @@ int main()
     cout << "Destructing class z\n";
     memSingleton::get().print_info();
 
-    // Assignment and copy ctors
+    // Copy Ctors
+    cout << "Nested Class with multiple references and copy ctor\n";
     {
+        GCBase<Z> z1(9);
+        GCBase<Z> z2(z1);
+        z1->f();
+        z2->f();
+        memSingleton::get().print_info();
     }
+    cout << "Destructing class z1 and z2\n";
+    memSingleton::get().print_info();
+
+    // Assignment operator
+    cout << "Nested Class with multiple references\n";
+    {
+        GCBase<Y> y1(20);
+        GCBase<Y> y2(30);
+        y1->f();
+        y2->f();
+        y1 = y2;
+        y1->f();
+        y2->f();
+        memSingleton::get().print_info();
+    }
+    cout << "Destructing class y1 and y2\n";
+    memSingleton::get().print_info();
+
+    // Memory expansion
+    cout << "Memory expansion\n";
+    {
+        GCBase<X> x1(1);
+        GCBase<double> x2(8.0);
+        GCBase<X> x3(3);
+        GCBase<X> x4(4);
+        GCBase<int> x5(5);
+        GCBase<X> x6(6);
+        GCBase<string> x7("Hello, World!\n");
+        GCBase<X> x8(8);
+        GCBase<X> x9(9);
+        memSingleton::get().print_info();
+    }
+    cout << "Destructing class x{1..9}\n";
+    memSingleton::get().print_info();
 }
