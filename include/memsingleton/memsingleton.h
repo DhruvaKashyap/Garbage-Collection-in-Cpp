@@ -40,5 +40,6 @@ public:
     }
     void print_info();
     static memSingleton &get();
+    void force_collect();
 };
 #endif

@@ -5,122 +5,50 @@ Abhijit Mohanty	PES1201801293 Section C
 Dhruva Kashyap	PES1201801457 Section F
 Thrivikraman V 	PES1201801469 Section D
 
-```cpp
-template<typename T>
-class A
-{	
-	T x;
-	public:
-	A();
-	// pools
-	~A();
-	// pools
-	class smart
-	{}
-	smart operator new()..
-	smart operator delete()..
-}
-template<typename T>
-class B
-{
-	A<T> *p;
-	B()
-	{
-		p = new A<T>();
-	}
-	~B()
-	{
-		delete p //optional in case of mark-sweep			
-	}
-}
+## Abstract
 
-int main()
-{
-	A<int>*::smart p = new A<int>(1);
-	A<int>*::smart y = new A<int>(1);
-	A<int>*::smart z = new A<int>(1);
-	B *x = new B();	//not collected
-	A<B>::smart x = new A<B>();
-}
+In this project, we implement a garbage collector in C++. C++ is not a fully managed language like Java. It is very well known that Java’s garbage collector is the greatest feature of Java, but, it would seem the entire language is built upon this invalid premise that the language must assume that the programmer does not know how to handle resources. 
+C++ is a more mature language, giving the programmer absolute authority and responsibility over all resources they request. In C++, we implement the mark and sweep algorithm, over references that the client requests and releases. The client interacts through an allocator, called GCBase, where they specify the type of the object, which could be a primitive type, or a class.
+This GCBase class supports all the operators of the type and the user can use the object as they would use an object of the actual type. 
+The allocator internally contains a “pointer” to the actual location of the memory in the heap. The pointer is actually an index in the memory buffer.
+The allocator modifies the memory through a singleton, memSingleton. This memSingleton acts like a facade, and allows for getting from memory, creating a new object, or destroying it.
+The singleton is composed of a collector and a memory manager. The collector performs the mark and sweep algorithm. When the client releases the resource, the singleton requests the collector to unregister the resource. On copies, the singleton requests the collector to register multiple references to the same object. On failure to allocation, the singleton requests the collector to perform garbage collection.
+The memory manager is buffer based memory manager with internal bookkeeping. It can allocate bytes of memory  as requested and release it from memory calculation when requested.
 
-mstr a = "asda"
-mstr b = "asda"
+## Code structure
 
-concept T::*
-template<typename T>
-class cg: T
-{
-}
+├── client.cpp
+├── include
+│   ├── collector
+│   │   └── collector.h
+│   ├── gc.h
+│   ├── memsingleton
+│   │   └── memsingleton.h
+│   ├── meta
+│   │   └── meta.h
+│   ├── mm
+│   │   └── mm.h
+│   └── policy
+│       ├── best_fit.h
+│       ├── first_fit.h
+│       └── policy.h
+└── src
+    ├── collector
+    │   ├── collector.cpp
+    ├── memsingleton
+    │   ├── memsingleton.cpp
+    ├── meta
+    │   └── meta.cpp
+    ├── mm
+    │   ├── mm.cpp
+    └── policy
+        ├── best_fit.cpp
+        ├── first_fit.cpp
+        ├── policy.cpp
 
-template<typename T>
-class cg
-{
-T val;
-opertor+(){return this.val+rhs.val;}
+## Running application
 
+```shell
+$ make
+$ ./a.out
 ```
-
-
-Collector c(algorithm); strategy policy pattern implementation
-
-init_thread(global::collector);
-
-Interface for the client to create garbage collectable objects
-
-Collector called after THRESHOLD bytes allocated
-
-Rigourous tests for calculating THRESHOLD and other parameters and at end
-
-GC for other resources like FILES, mutexes etc
-
-GC only for heap based resources
-
-operator functions etc
-
-Work on all kinds of objects eg: user defined classes,containers
-
-```cpp
-auto i = new gc<int>;
-A(){p=new gc<int>;}
-auto i = new gc<A>;
-    {
-        auto i = new gc<int>;
-    } // auto j = i;
-shape* s = new circle;
-```
-
-heirarchy of ptrs for a type
-
-base classes, lots of them
-
-random root < ptr arithmatic
-
-specialize for is_class to inherit and get interface
-
-With simple resources, do FT-1 assignment 1 in C++
-
-Problems:
-
-Derived to base conversion
-
-Complex resources
-
-# Class has to be canonical
-
-# references must always be initialized
-
-1. Flash Diagrams
-2. Simple mark and sweep
-3. Interface
-	mention memory buffer
-4. Client
-	placement new
-	explicit dtors
-	heap expansion and limit
-5. UML
-	show files
-	ar library
-
-# TODO
-Draw pictures by hand
-Fix UML diagrams

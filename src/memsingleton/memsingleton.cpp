@@ -56,3 +56,7 @@ memSingleton &memSingleton::get()
     static memSingleton instance;
     return instance;
 }
+void memSingleton::force_collect()
+{
+    C.collect(&manager);
+}

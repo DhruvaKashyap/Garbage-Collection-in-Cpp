@@ -99,7 +99,8 @@ int main()
     }
     cout << "Destructing x\n";
     memSingleton::get().print_info();
-
+    memSingleton::get().force_collect();
+    
     // Nested class
     cout << "Nested Class y\n";
     {
@@ -157,12 +158,30 @@ int main()
         GCBase<X> x1(1);
         GCBase<double> x2(8.0);
         GCBase<X> x3(3);
+        cout << x1 << '\n';
+        cout << x2 << '\n';
+        cout << x3 << '\n';
         GCBase<X> x4(4);
         GCBase<int> x5(5);
         GCBase<X> x6(6);
+        cout << x1 << '\n';
+        cout << x2 << '\n';
+        cout << x3 << '\n';
+        cout << x4 << '\n';
+        cout << x5 << '\n';
+        cout << x6 << '\n';
         GCBase<string> x7("Hello, World!\n");
         GCBase<X> x8(8);
         GCBase<X> x9(9);
+        cout << x1 << '\n';
+        cout << x2 << '\n';
+        cout << x3 << '\n';
+        cout << x4 << '\n';
+        cout << x5 << '\n';
+        cout << x6 << '\n';
+        cout << (string)(x7);
+        cout << x8 << '\n';
+        cout << x9 << '\n';
         memSingleton::get().print_info();
     }
     cout << "Destructing class x{1..9}\n";
