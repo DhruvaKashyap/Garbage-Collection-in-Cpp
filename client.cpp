@@ -42,6 +42,7 @@ class Z
 
 public:
     Z(int n, string a) : c(n), d(a), x(n + 1), y(n + 2){};
+    ~Z() { cout << "Dtor Z\n"; }
     void f()
     {
         cout << "This is Z(" << c << "," << d << ")\n";

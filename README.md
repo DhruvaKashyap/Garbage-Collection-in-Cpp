@@ -118,3 +118,9 @@ Complex resources
 	explicit dtors
 	heap expansion and limit
 5. UML
+	show files
+	ar library
+
+# TODO
+Draw pictures by hand
+Fix UML diagrams

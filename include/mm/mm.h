@@ -14,7 +14,7 @@ class Mem_manager
     char *p;
     int size;
     policy *pol;
-    const int MAXSIZE = 100000000;
+    const int MAXSIZE = 199;
 
 public:
     friend class memSingleton;
