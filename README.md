@@ -17,6 +17,7 @@ The memory manager is buffer based memory manager with internal bookkeeping. It 
 
 ## Code structure
 
+```
 ├── client.cpp
 ├── include
 │   ├── collector
@@ -45,6 +46,7 @@ The memory manager is buffer based memory manager with internal bookkeeping. It 
         ├── best_fit.cpp
         ├── first_fit.cpp
         ├── policy.cpp
+```
 
 ## Running application
 
