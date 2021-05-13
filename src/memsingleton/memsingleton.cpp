@@ -3,33 +3,37 @@
 using namespace std;
 memSingleton::memSingleton()
 {
+    manager = new Mem_manager;
+    C = new Collector;
 }
 
 memSingleton::~memSingleton()
 {
-    C.cleanUp();
-    C.collect(&manager);
+    C->cleanUp();
+    C->collect(manager);
     cout << "FINAL COLLECT COMPLETE\n";
     print_info();
+    delete manager;
+    delete C;
 }
 
 Mem_manager::ptr memSingleton::alloc(size_t s)
 {
-    auto ret = manager.mymalloc(s);
+    auto ret = manager->mymalloc(s);
     if (ret == -1)
-        C.collect(&manager);
-    while (ret == -1 && manager.size < manager.MAXSIZE)
+        C->collect(manager);
+    while (ret == -1 && manager->size < manager->MAXSIZE)
     {
         print_info();
-        ret = manager.mymalloc(s);
+        ret = manager->mymalloc(s);
         if (ret == -1)
         {
             try
             {
-                auto new_size = manager.size * 2;
-                if (new_size > manager.MAXSIZE)
+                auto new_size = manager->size * 2;
+                if (new_size > manager->MAXSIZE)
                     throw "HEAP SIZE EXCEEDED\n";
-                manager.expand(new_size);
+                manager->expand(new_size);
             }
             catch (const char *a)
             {
@@ -45,9 +49,9 @@ Mem_manager::ptr memSingleton::alloc(size_t s)
 void memSingleton::print_info()
 {
     cout << "---------------------------------------------\n";
-    manager.display_mem_map();
+    manager->display_mem_map();
     cout << "---------------------------------------------\n";
-    C.printInfo();
+    C->printInfo();
     cout << "---------------------------------------------\n\n\n";
 }
 
@@ -58,5 +62,5 @@ memSingleton &memSingleton::get()
 }
 void memSingleton::force_collect()
 {
-    C.collect(&manager);
+    C->collect(manager);
 }
