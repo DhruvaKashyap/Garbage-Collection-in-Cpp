@@ -1,9 +1,9 @@
 # Garbage-Collection-in-Cpp
 
 Team members:
-Abhijit Mohanty	PES1201801293 Section C
-Dhruva Kashyap	PES1201801457 Section F
-Thrivikraman V 	PES1201801469 Section D
+1. Abhijit Mohanty - PES1201801293 - Section C
+2. Dhruva Kashyap - PES1201801457 - Section F
+3. Thrivikraman V  - PES1201801469 - Section D
 
 ## Abstract
 
@@ -14,6 +14,12 @@ The allocator internally contains a “pointer” to the actual location of the 
 The allocator modifies the memory through a singleton, memSingleton. This memSingleton acts like a facade, and allows for getting from memory, creating a new object, or destroying it.
 The singleton is composed of a collector and a memory manager. The collector performs the mark and sweep algorithm. When the client releases the resource, the singleton requests the collector to unregister the resource. On copies, the singleton requests the collector to register multiple references to the same object. On failure to allocation, the singleton requests the collector to perform garbage collection.
 The memory manager is buffer based memory manager with internal bookkeeping. It can allocate bytes of memory  as requested and release it from memory calculation when requested.
+
+## Architecture
+
+<p align="center">
+<img src="./diagrams/UML.png">
+</p>
 
 ## Code structure
 
@@ -48,7 +54,7 @@ The memory manager is buffer based memory manager with internal bookkeeping. It 
         ├── policy.cpp
 ```
 
-## Running application
+## Running the application
 
 ```shell
 $ make
